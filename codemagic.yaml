@@ -10,7 +10,7 @@ workflows:
           npm install
       - name: Construir app
         script: |
-          expo build:android || npx expo export
+          npx expo export
     artifacts:
       - "build/*.apk"
       - "*.apk"
