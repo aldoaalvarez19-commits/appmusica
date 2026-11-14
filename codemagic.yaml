@@ -2,6 +2,7 @@ workflows:
   react-native-workflow:
     name: Compilar Aplicacion de Musica
     max_build_duration: 60
+    working_directory: nombre_de_tu_carpeta
     environment:
       node: latest
     scripts:
