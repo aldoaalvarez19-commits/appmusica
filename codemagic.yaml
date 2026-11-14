@@ -12,6 +12,6 @@ workflows:
         script: |
           expo build:android || npx expo export
     artifacts:
-      - build/*.apk
-      - *.apk
+      - "build/*.apk"
+      - "*.apk"
       
