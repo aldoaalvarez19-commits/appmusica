@@ -1,20 +1,45 @@
 workflows:
   react-native-workflow:
     name: Compilar Aplicacion de Musica
-    max_build_duration: 60
+    max_build_duration: 90
     instance_type: mac_mini_m2
     environment:
       node: latest
     scripts:
+      - name: Ver estructura del repositorio
+        script: |
+          echo "=== Contenido de la carpeta raíz ==="
+          ls -la
+          echo ""
+          echo "=== Buscando package.json ==="
+          find . -name "package.json" | head -20
+          echo ""
+          echo "=== Directorio actual ==="
+          pwd
+
       - name: Instalar dependencias
         script: |
+          # Si el package.json está en una subcarpeta, descomenta la siguiente línea
+          # y pon el nombre correcto de la carpeta:
+          # cd nombre_de_la_carpeta
+          
+          if [ ! -f package.json ]; then
+            echo "ERROR: No se encontró package.json en la carpeta actual"
+            echo "Contenido actual:"
+            ls -la
+            exit 1
+          fi
+          
           npm install
+
       - name: Generar proyecto Android nativo
         script: |
           npx expo prebuild --platform android --clean
+
       - name: Configurar Android SDK
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+
       - name: Construir APK (debug)
         script: |
           cd android
