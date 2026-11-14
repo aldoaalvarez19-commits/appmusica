@@ -2,17 +2,23 @@ workflows:
   react-native-workflow:
     name: Compilar Aplicacion de Musica
     max_build_duration: 60
-    working_directory: nombre_de_tu_carpeta
+    instance_type: mac_mini_m2
     environment:
       node: latest
     scripts:
       - name: Instalar dependencias
         script: |
           npm install
-      - name: Construir app
+      - name: Generar proyecto Android nativo
         script: |
-          npx expo export
+          npx expo prebuild --platform android --clean
+      - name: Configurar Android SDK
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+      - name: Construir APK (debug)
+        script: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
     artifacts:
-      - "build/*.apk"
-      - "*.apk"
-      
+      - android/app/build/outputs/**/*.apk
